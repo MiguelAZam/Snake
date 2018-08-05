@@ -3,7 +3,7 @@ COMP = g++
 
 all: game
 
-game: ${COMMON_OBJECTS} area.o main.o
+game: ${COMMON_OBJECTS} area.o node.o snake.o main.o
 	(${COMP} -o  $@ $^ ${LIBS})
 	(mkdir bin; mv *.o ./bin/)
 
