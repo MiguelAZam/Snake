@@ -24,6 +24,7 @@ int main(){
   Area fruitSquare = Area(squareSize, squareSize);
   Area snakeSquare = Area(squareSize, squareSize);
   Snake snake = Snake(W/2-10, H/2-10);
+  Node fruit = Node((rand()%((W/squareSize)-2)*10 + 10), (rand()%((H/squareSize)-2))*10 + 10);
 
 
   while(window.isOpen()){
@@ -45,12 +46,16 @@ int main(){
     if(timer>delay){
       timer=0;
       snake.update();
+      if(snake.eat(fruit)){
+	fruit = Node((rand()%((W/squareSize)-2)*10 + 10), (rand()%((H/squareSize)-2))*10 + 10);
+      }
+      if(snake.check()) window.close();
     }
 
     window.clear(sf::Color::Black);
 
     walls.drawRect(sf::Color::Black, sf::Color::White, thick, 9, 9, ptrWindow);
-    fruitSquare.drawRect(sf::Color::Red, sf::Color::White, thick, rand()%W, rand()%H, ptrWindow);
+    fruitSquare.drawRect(sf::Color::Red, sf::Color::White, thick, fruit.x, fruit.y, ptrWindow);
 
     snakeSquare.drawRect(sf::Color::White, sf::Color::Black, thick, snake.getX(), snake.getY(), ptrWindow);
     

@@ -9,6 +9,7 @@ Snake::Snake(int x, int y){
 
 bool Snake::check(){
   Node *temp = new Node();
+  if(head->x<10|| head->x>580 || head->y<10 || head->y>580) return true;
   for(temp=head->next; temp; temp=temp->next){
     if(head->x == temp->x && head->y == temp->y) return true;
   }
@@ -36,9 +37,15 @@ void Snake::update(){
 }
 
 void Snake::add(){
-  //Node *newTail = new Node(tail->x, tail->y);
-  //tail->next = newTail;
-  //tail = newTail;
+  
+}
+
+bool Snake::eat(Node node){
+  if(head->x == node.x && head->y == node.y){
+    //add();
+    return true;
+  }
+  return false;
 }
 
 int Snake::getX(){
