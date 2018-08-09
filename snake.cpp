@@ -7,7 +7,7 @@ Snake::Snake(int x, int y){
   dir = 1;
 }
 
-bool Snake::check(){
+bool Snake::checkGameOver(){
   Node *temp = new Node();
   if(head->x<10|| head->x>580 || head->y<10 || head->y>580) return true;
   for(temp=head->next; temp; temp=temp->next){
@@ -20,38 +20,32 @@ void Snake::setDir(int direction){
   dir=direction;
 }
 
-void Snake::update(){
+void Snake::updatePreTail(){
+  for(preTail=head; preTail->next->next; preTail=preTail->next);
+}
+
+void Snake::advance(){
   Node *newHead = new Node(head->x, head->y);
   if(dir/2 == 0){
     newHead->x = (dir%2) * 10 + head->x;
   } else{
     newHead->y = (dir%2) * 10 + head->y;
   }
-  if(preTail == NULL){
-    head = newHead;
-  } else{
-    preTail->next = NULL;
-    newHead->next = head;
-    head = newHead;
-  }
+  newHead->next = head;
+  head = newHead;
+  updatePreTail();
 }
 
-void Snake::add(){
-  
-}
-
-bool Snake::eat(Node node){
-  if(head->x == node.x && head->y == node.y){
-    //add();
-    return true;
-  }
+bool Snake::eat(Node fruit){
+  if(head->x == fruit.x && head->y == fruit.y) return true;
+  preTail->next = NULL;
   return false;
 }
 
-int Snake::getX(){
-  return head->x;
-}
-
-int Snake::getY(){
-  return head->y;
+void Snake::drawSnake(Area *ptrSnake, sf::Color fill, sf::Color outline, int lineWeight, sf::RenderWindow *ptrWindow){
+  Node *temp = new Node();
+  temp = head;
+  for(; temp; temp=temp->next){
+    ptrSnake->drawRect(fill, outline, lineWeight, temp->x, temp->y, ptrWindow);
+  }
 }

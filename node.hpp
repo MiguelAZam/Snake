@@ -1,3 +1,6 @@
+#ifndef node_h
+#define node_h
+
 class Node{
 
 public:
@@ -8,3 +11,5 @@ public:
   Node(int x, int y);
   
 };
+
+#endif

@@ -22,7 +22,7 @@ int main(){
 
   Area walls = Area(W-20, H-20);
   Area fruitSquare = Area(squareSize, squareSize);
-  Area snakeSquare = Area(squareSize, squareSize);
+  Area *ptrSnake = new Area(squareSize, squareSize);
   Snake snake = Snake(W/2-10, H/2-10);
   Node fruit = Node((rand()%((W/squareSize)-2)*10 + 10), (rand()%((H/squareSize)-2))*10 + 10);
 
@@ -36,20 +36,25 @@ int main(){
     while(window.pollEvent(event)){
       if(event.type == sf::Event::Closed) window.close();
       
-      if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && std::abs(snake.dir/2) != 0) snake.setDir(-1);
-      if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && std::abs(snake.dir/2) != 0) snake.setDir(1);
-      if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && std::abs(snake.dir/2) != 1) snake.setDir(-3);
-      if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && std::abs(snake.dir/2) != 1) snake.setDir(3);
+      if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && std::abs(snake.dir/2) != 0) {
+	snake.setDir(-1);
+      } else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && std::abs(snake.dir/2) != 0) {
+	snake.setDir(1);
+      } else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && std::abs(snake.dir/2) != 1) {
+	snake.setDir(-3);
+      } else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && std::abs(snake.dir/2) != 1) {
+	snake.setDir(3);
+      }
 
     }
 
     if(timer>delay){
       timer=0;
-      snake.update();
+      snake.advance();
+      if(snake.checkGameOver()) window.close();
       if(snake.eat(fruit)){
 	fruit = Node((rand()%((W/squareSize)-2)*10 + 10), (rand()%((H/squareSize)-2))*10 + 10);
       }
-      if(snake.check()) window.close();
     }
 
     window.clear(sf::Color::Black);
@@ -57,7 +62,7 @@ int main(){
     walls.drawRect(sf::Color::Black, sf::Color::White, thick, 9, 9, ptrWindow);
     fruitSquare.drawRect(sf::Color::Red, sf::Color::White, thick, fruit.x, fruit.y, ptrWindow);
 
-    snakeSquare.drawRect(sf::Color::White, sf::Color::Black, thick, snake.getX(), snake.getY(), ptrWindow);
+    snake.drawSnake(ptrSnake, sf::Color::White, sf::Color::Black, thick, ptrWindow);
     
     window.display();
   }
